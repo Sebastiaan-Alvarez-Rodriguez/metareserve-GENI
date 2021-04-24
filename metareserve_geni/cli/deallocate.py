@@ -1,11 +1,8 @@
-import internal.gni.py2bridge
+import internal.gni.py2bridge as py2bridge
 from internal.util.printer import *
 
 '''CLI module to deallocate a cluster.'''
 
-
-def deallocate(slicename, location):
-    return deallocate(slicename, location=locutil.location_get(location))
 
 
 def subparser(subparsers):
@@ -27,4 +24,4 @@ def deploy_args_set(args):
 
 
 def deploy(parsers, args):
-    return deallocate(args.name, args.location)
+    return py2bridge.sliver_deallocate(args.name, args.location)

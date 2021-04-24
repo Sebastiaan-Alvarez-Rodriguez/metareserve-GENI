@@ -12,7 +12,8 @@ sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__)))) # A
 def _get_modules():
     import cli.allocate as allocate
     import cli.deallocate as deallocate
-    return [allocate, deallocate]
+    import cli.listing as listing
+    return [allocate, deallocate, listing]
 
 
 # Register subparser modules

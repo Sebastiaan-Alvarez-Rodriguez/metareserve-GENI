@@ -1,4 +1,5 @@
 import datetime
+import metareserve
 import os
 import subprocess
 import tempfile
@@ -33,14 +34,15 @@ def _py2_allocate(expiration, allocrequest, slicename, location, python='python'
     if location != None:
         cmd += ' --location {}'.format(location)
     with tempfile.TemporaryDirectory() as tmpdirname: # We use a tempfile to store the returned connectioninfo.
-        path = os.path.join(tmpdirname, 'metaspark.tmp')
+        path = os.path.join(tmpdirname, 'metareserve_geni.tmp')
         cmd += ' --tmpoutloc {}'.format(path)
         process = subprocess.Popen(cmd, stdin=subprocess.PIPE, shell=True)
         process.communicate(str(allocrequest).encode('utf-8'))
         if process.returncode != 0:
             return None
         with open(path, 'r') as f:
-            return [_RawConnectInfo.from_string(line) for line in f.readlines()]
+            raw_infos = (_RawConnectInfo.from_string(line) for line in f.readlines())
+    return [metareserve.reservation.Node(idx, node_name=x.name, ip_local=x.ip_local, ip_public=x.ip_public, port=x.port, extra_info={'username': x.user}) for idx, x in enumerate(raw_infos)]
 
 
 
@@ -54,23 +56,13 @@ def list_slices(slicename=None, location=None, show_all=False):
     Returns:
         `True` on success, `False` otherwise.'''
     cmd = 'python {} list slices'.format(_get_py2_cli())
-    if name != None:
+    if slicename != None:
         cmd += ' --name {}'.format(slicename)
     if location != None:
         cmd += ' --location {}'.format(location)
     if show_all:
         cmd += ' --all'
     return os.system(cmd) == 0
-
-
-def list_slivers(slicename):
-    '''List slivers for a given slice.
-    Args:
-        slicename: Name of the slice to show slivers for.
-
-    Returns:
-        `True` on success, `False` otherwise.'''
-    return os.system('python {} list slivers --name {}'.format(_get_py2_cli(), name)) == 0
 
 
 def deallocate(slicename, location):
@@ -80,9 +72,9 @@ def deallocate(slicename, location):
 
     Returns:
         `True` on success, `False` otherwise.'''
-    cmd = 'python {} deallocatesliver'.format(_get_py2_cli())
-    if name != None:
-        cmd += ' --name {}'.format(name)
+    cmd = 'python {} deallocate'.format(_get_py2_cli())
+    if slicename != None:
+        cmd += ' --name {}'.format(slicename)
     if location != None:
         cmd += ' --location {}'.format(location)
     return os.system(cmd) == 0
@@ -95,7 +87,7 @@ def allocate(expiration, reservation_request):
         reservation_request (GENIReservationRequest): Request object for allocation.
 
     Returns:
-        List of `Node` on success, `None` otherwise.'''
+        List of `metareserve.reservation.Node` on success, `None` otherwise.'''
     alloc_request = _to_internal_request(reservation_request)
     val = _py2_allocate(expiration, alloc_request, reservation_request.slicename, reservation_request.location)
     if val:

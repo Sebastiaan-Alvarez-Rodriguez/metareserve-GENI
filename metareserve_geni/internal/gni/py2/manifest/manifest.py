@@ -3,7 +3,6 @@ import datetime
 import pprint
 import xmltodict
 
-from connectinfo import RawConnectInfo
 
 class ManifestType(Enum):
     CREATE_SLIVER = 0
@@ -60,9 +59,9 @@ class Manifest(object):
 
 
     def get_connect_info(self):
-        '''Returns connection info objects for all found nodes'''
+        '''Returns iterable of tuples:(name, user, ip_public, port) for all found nodes'''
         if self.__type == ManifestType.CREATE_SLIVER:
-            return (RawConnectInfo(
+            return ((
                 str(self.data['rspec']['node'][idx]['@client_id']),
                 str(self.data['rspec']['node'][idx]['services']['login']['@username']),
                 str(self.data['rspec']['node'][idx]['host']['@ipv4']),
@@ -72,4 +71,4 @@ class Manifest(object):
             ip = str(self.data['rspec']['node']['host']['@ipv4'])
             user = str(self.data['rspec']['node']['services']['login']['@username'])
             port = str(self.data['rspec']['node']['services']['login']['@port'])
-            return [RawConnectInfo(name, user, ip, port)]
+            return [(name, user, ip, port)]

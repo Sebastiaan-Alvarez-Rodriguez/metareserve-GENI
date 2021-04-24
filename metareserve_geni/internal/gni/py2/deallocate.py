@@ -1,5 +1,6 @@
-import allocate.cph as ceph
-from allocrequest import AllocRequest
+import geni.util
+
+import alloc.generic as generic
 import location.location as locutil
 
 '''CLI module to deallocate a cluster.'''

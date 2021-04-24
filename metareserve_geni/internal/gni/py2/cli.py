@@ -12,7 +12,8 @@ sys.path.append(os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(sys
 def _get_modules():
     import allocate
     import deallocate
-    return [allocate, deallocate]
+    import listing
+    return [allocate, deallocate, listing]
 
 
 # Register subparser modules
@@ -31,8 +32,8 @@ def deploy(parsers, args):
 
 
 def main():
-    if not deps.geni_check():
-        print('Missing dependencies! Required:\ngeni-lib==0.9.9.2\nsix\nlxml')
+    if not deps.geni_check(silent=False):
+        print('There were unmet dependencies for python2. Please install the correct versions of missing packages in (!!!) python2 (!!!) and try again.')
         return False
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
 

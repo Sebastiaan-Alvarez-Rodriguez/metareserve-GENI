@@ -1,7 +1,7 @@
 import argparse
 import datetime
 
-import internal.gni.py2bridge
+import internal.gni.py2bridge as py2bridge
 from internal.util.printer import *
 import internal.util.fs as fs
 import internal.util.location as loc
@@ -86,7 +86,11 @@ Set date to {1}'''.format(
             reservation_request.from_string('\n'.join(f.readlines()))
     else:
         reservation_request = build_request_interactive(time_amount, node_amount)
-    py2bridge.allocate(expiration, reservation_request)
+    nodes = py2bridge.allocate(expiration, reservation_request)
+    print('node_id,node_name,ip_local,ip_public,port,extra_info')
+    for x in nodes:
+        print(str(x))
+    prints('Reservation success')
 
 
 
