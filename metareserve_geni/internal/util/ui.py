@@ -1,10 +1,9 @@
+from internal.util.printer import *
+
 # This file provides useful user interaction primitives.
 
-from util.printer import *
-
-
-# Ask the user to provide an integer value, with optional min and max values
 def ask_int(question, minval=None, maxval=None):
+    # Ask the user to provide an integer value, with optional min and max values
     while True:
         try:
             val = input(str(question)+' ').strip()
@@ -20,28 +19,30 @@ def ask_int(question, minval=None, maxval=None):
             printe('Input "{0}" is not a number. Try again'.format(val))
 
 
-# Ask user for a boolean value
-def ask_bool(question):
+def ask_bool(question, empty_ok=False):
+    # Ask user for a boolean value. If `empty_ok` and no input given, False is returned.
     while True:
         val = input(str(question)+' ').strip().lower()
         if val in ('y', 'yes', 't', 'true'):
             return True
         elif val in ('n', 'no', 'f', 'false'):
             return False
+        elif empty_ok and not any(val):
+            return False
         else:
             printe('Input "{0}" could not be interpreted as a boolean. Try again'.format(val))
 
-# Ask user for a string, possibly with confirmation
 def ask_string(question, confirm=False, empty_ok=False):
+    # Ask user for a string, possibly with confirmation
     while True:
         val = input(str(question)+' ').strip()
-        if not empty_ok and len(val)==0:
-            printe('You should provide an empty string!')
+        if not empty_ok and not any(val):
+            printe('You should not provide an empty string!')
         elif (confirm and ask_bool('Your choice: "{}". Are you absolutely sure this is correct?'.format(val))) or not confirm:
             return val
 
-# Ask user for a string resembling [[hh:]mm:]ss
 def ask_time(question):
+    # Ask user for a string resembling [[hh:]mm:]ss
     while True:
         val = ask_string(question+' [[hh:]mm:]ss ')
         comps = val.split(':')
@@ -66,9 +67,9 @@ def ask_time(question):
                 printe('Seconds are not numeric. Try again.')
 
 
-# Ask user to pick one of the displayed options.
-# Returns integer index of picked item
 def ask_pick(question, options: list):
+    # Ask user to pick one of the displayed options.
+    # Returns integer index of picked item.
     if len(options) == 0:
         raise RuntimeError('Cannot pick 1 option from 0 options!')
     while True:
@@ -87,9 +88,9 @@ def ask_pick(question, options: list):
         except Exception as e:
             printe('Input "{0}" is not a number. Try again'.format(val))
 
-# Like ask_pick(), ask users to pick an item.
-# Returns a sorted list of integer indices of picked items.
 def ask_pick_multiple(question, options: list, minimal=1):
+    # Like ask_pick(), ask users to pick an item.
+    # Returns a sorted list of integer indices of picked items.
     if minimal < 0 or minimal > len(options):
         raise RuntimeError('Cannot pick {} options in a list of size {}'.format(minimal, len(options)))
     while True:

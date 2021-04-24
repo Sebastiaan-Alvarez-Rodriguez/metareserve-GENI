@@ -1,14 +1,12 @@
 import subprocess
 import os
 import threading
-from util.lock import Synchronized
+from internal.util.lock import Synchronized
 # Synchronized
 class Executor(object):
-    '''
-    Object to run subprocess commands in a separate thread.
+    '''Object to run subprocess commands in a separate thread.
     This way, Python can continue operating while interacting 
-    with subprocesses.
-    '''
+    with subprocesses.'''
     def __init__(self, cmd, **kwargs):
         self.cmd = cmd
         self.started = False
@@ -17,8 +15,8 @@ class Executor(object):
         self.process = None
         self.kwargs = kwargs
 
-    # Run our command. Returns immediately after booting a thread
     def run(self):
+        # Run our command. Returns immediately after booting a thread
         if self.started:
             raise RuntimeError('Executor already started. Make a new Executor for a new run')
         if self.stopped:
@@ -35,9 +33,9 @@ class Executor(object):
         self.thread.start()
         self.started = True
 
-    # Run our command on this thread, waiting until it completes.
-    # Note: Some commands never return, be careful with this method!
     def run_direct(self):
+        # Run our command on this thread, waiting until it completes.
+        # Note: Some commands never return, be careful with this method!
         self.process = subprocess.Popen(self.cmd, **self.kwargs)
         self.started = True
         self.process.communicate()
@@ -100,15 +98,14 @@ class Executor(object):
 
     @staticmethod
     def wait_all(executors, stop_on_error=True, return_returncodes=False, print_on_error=False):
-        '''
-        Waits for all executors before returning control.
+        '''Waits for all executors before returning control.
         Args:
             stop_on_error: If set, immediately kills all remaining executors when encountering an error. Otherwise, we continue executing the other executors.
             return_returncodes: If set, returns the process returncodes. Otherwise, returns regular `True`/`False` (see below).
             print_on_error: If set, prints the command(s) responsible for errors. Otherwise, this function is silent.
+        
         Returns:
-            `True` if all processes sucessfully executed, `False` otherwise.
-        '''
+            `True` if all processes sucessfully executed, `False` otherwise.'''
         returncodes = []
         status = True
         for x in executors:

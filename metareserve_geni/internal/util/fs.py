@@ -14,8 +14,8 @@ from pathlib import Path
 def abspath(path=os.path.dirname(sys.argv[0])):
     return os.path.abspath(path)
 
-# Returns absolute path for a given file
 def abspathfile(file):
+    # Returns absolute path for a given file
     return os.path.abspath(os.path.dirname(file))
 
 def basename(path):
@@ -49,14 +49,14 @@ def isemptydir(path, *args):
 def isfile(path, *args):
     return os.path.isfile(join(path,*args))
 
-# Note: Returns always False on unsupported systems.
-# Note: Be careful: Even if given symlink points to non-existing target, returns True
 def issymlink(path, *args):
+    # Note: Returns always False on unsupported systems.
+    # Note: Be careful: Even if given symlink points to non-existing target, returns True
     return os.path.islink(join(path, *args))
 
-# Resolve a symlink. With full_resolve, 
-# we keep following links until we find end destination
 def resolvelink(path, *args, full_resolve=True):
+    # Resolve a symlink. With full_resolve, 
+    # we keep following links until we find end destination
     return str(Path(join(path, *args)).resolve().absolute()) if full_resolve else os.readlink(join(path, *args))
 
 def join(directory, *args):
@@ -109,8 +109,8 @@ def rm(directory, *args, ignore_errors=False):
 def sep():
     return os.sep
 
-# Return size of file in bytes
 def sizeof(directory, *args):
+    # Return size of file in bytes
     path = join(directory, *args)
     if not isfile(path):
         raise RuntimeError('Error: "{}" is no path to a file'.format(path))
@@ -119,8 +119,8 @@ def sizeof(directory, *args):
 def split(path):
     return path.split(os.sep)
 
-# Touch-like command, does not emulate mtime if file already exists
 def touch(path, *args):
+    # Touch-like command, does not emulate mtime if file already exists
     path = join(path, *args)
     if exists(path):
         raise RuntimeError('Error: "{}" already exists'.format(path))

@@ -18,8 +18,8 @@ setuptools.setup(
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
     url='https://github.com/Sebastiaan-Alvarez-Rodriguez/metareserve-GENI',
-    packages=setuptools.find_packages(),#where='metareserve_geni'),
-    # package_dir={'': 'metareserve_geni'},
+    packages=setuptools.find_packages(),
+    package_dir={'': '.'},
     classifiers=(
         'Environment :: Console',
         'Programming Language :: Python :: 3',
@@ -29,28 +29,7 @@ setuptools.setup(
     install_requires=install_requires,
     entry_points={
         'console_scripts': [
-            'geni-reserve = metareserve_geni.cli.cli:main',
+            'geni-reserve = metareserve_geni.cli.entrypoint:main',
             ],
-        # 'metareserve-GENI.cli.main': [
-        # ]
-        # 'ceph_deploy.cli': [
-        #     'new = ceph_deploy.new:make',
-        #     'install = ceph_deploy.install:make',
-        #     'uninstall = ceph_deploy.install:make_uninstall',
-        #     'purge = ceph_deploy.install:make_purge',
-        #     'purgedata = ceph_deploy.install:make_purge_data',
-        #     'mon = ceph_deploy.mon:make',
-        #     'gatherkeys = ceph_deploy.gatherkeys:make',
-        #     'osd = ceph_deploy.osd:make',
-        #     'disk = ceph_deploy.osd:make_disk',
-        #     'mds = ceph_deploy.mds:make',
-        #     'mgr = ceph_deploy.mgr:make',
-        #     'forgetkeys = ceph_deploy.forgetkeys:make',
-        #     'config = ceph_deploy.config:make',
-        #     'admin = ceph_deploy.admin:make',
-        #     'pkg = ceph_deploy.pkg:make',
-        #     'rgw = ceph_deploy.rgw:make',
-        #     'repo = ceph_deploy.repo:make',
-        #     ],
     },
 )

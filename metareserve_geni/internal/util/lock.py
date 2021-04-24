@@ -1,8 +1,7 @@
-# File which provides Java-style class locking
-
-
 from functools import wraps
 from threading import Lock
+
+# File which provides Java-style class locking
 
 def synchronized(lock):
     def wrapper(f):
@@ -14,10 +13,10 @@ def synchronized(lock):
     return wrapper
 
 
-# Make object-level lock (no 2 functions of object may run concurrently)
-# Usage:
-#     class <name>(Synchronized):...
 class Synchronized:
+    # Make object-level lock (no 2 functions of object may run concurrently)
+    # Usage:
+    #     class <name>(Synchronized):...
     def __init_subclass__(cls, **kw):
         synchronizer = synchronized(Lock())
         for name in cls.__dict__:

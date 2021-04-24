@@ -1,14 +1,14 @@
-# Contains functions to interact with Python's import libraries.
-# As there import libraries change a lot between versions,
-# this file is essential to work with importlib.
 import subprocess
 import sys
 import importlib
 
-import util.fs as fs
+import internal.util.fs as fs
 
-# Check if a given library exists. Returns True if given name is a library, False otherwise
+# Contains functions to interact with Python's import libraries. As there import libraries change a lot between versions, this file is essential to work with importlib.
+
+
 def library_exists(name):
+    # Check if a given library exists. Returns `True` if given name is a library, `False` otherwise.
     if sys.version_info >= (3, 6):
         import importlib.util
         return importlib.util.find_spec(str(name)) is not None
@@ -17,8 +17,9 @@ def library_exists(name):
     else:
         raise NotImplementedError('Did not implement existence check for Python 3.3 and below')
 
-# Import a library from a filesystem full path (i.e. starting from root)
+
 def import_full_path(full_path):
+    # Import a library from a filesystem full path (i.e. starting from root).
     module_name = '.'.join(full_path.split(fs.sep()))
     if sys.version_info >= (3, 5):
         import importlib.util

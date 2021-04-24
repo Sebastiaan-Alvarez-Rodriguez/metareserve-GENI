@@ -1,3 +1,4 @@
+from metareserve.reservation import ReservationRequest as _ReservationRequest
 
 class GENINode(object):
     '''Trivial object holding information about GENI nodes.
@@ -25,7 +26,7 @@ class GENINode(object):
 
 
 
-class GENIReservationRequest(ReservationRequest):
+class GENIReservationRequest(_ReservationRequest):
     '''Object representing a regular reservation request (request nodes for X minutes).'''
     def __init__(self, num_nodes, duration_minutes, location, slicename):
         '''Args:
@@ -34,10 +35,10 @@ class GENIReservationRequest(ReservationRequest):
             location (str): Location for reserved nodes.
             slicename (str): Slicename to use for allocation.'''
         super.__init__(num_nodes, duration_minutes, location=location)
-            if duration_minutes >= 7200:
-                raise ValueError('GENI only allows to allocate for 7199 minutes or less.')
-            self.nodes = {idx: GENINode(hw_type, )}
-            self.slicename = slicename
+        if duration_minutes >= 7200:
+            raise ValueError('GENI only allows to allocate for 7199 minutes or less.')
+        self.nodes = {idx: GENINode(hw_type, )}
+        self.slicename = slicename
 
 
     def add(self, node):
