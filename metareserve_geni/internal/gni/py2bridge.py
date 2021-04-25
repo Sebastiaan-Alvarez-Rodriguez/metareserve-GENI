@@ -28,6 +28,17 @@ def _get_py2_cli():
     return fs.join(str(pathlib.Path(__file__).parent.absolute()), 'py2', 'cli.py')
 
 
+def _get_py2_executable_name():
+    '''Simple function trying to find the python2 executable name.
+    Returns:
+        The name of the python2 executable on success, `None` otherwise.'''
+    if subprocess.call('which python2', shell=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL) == 0:
+        return 'python2'
+    if subprocess.call('which python', shell=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL) == 0:
+        return 'python'
+    return None
+
+
 def _py2_allocate(expiration, allocrequest, slicename, location, python='python'):
     cmd ='{} {} allocate {}'.format(python, _get_py2_cli(), expiration)
     if slicename != None:
@@ -90,8 +101,5 @@ def allocate(expiration, reservation_request):
     Returns:
         List of `metareserve.reservation.Node` on success, `None` otherwise.'''
     allocrequest = _to_internal_request(reservation_request)
-    val = _py2_allocate(expiration, allocrequest, reservation_request.slicename, reservation_request.location)
-    if val:
-        return val
-    # Perhaps python2 executable is 'python2'
-    return _py2_allocate(expiration, allocrequest, reservation_request.slicename, reservation_request.location, python='python2')
+    py2_exec = _get_py2_executable_name()
+    return _py2_allocate(expiration, allocrequest, reservation_request.slicename, reservation_request.location, python=py2_exec)

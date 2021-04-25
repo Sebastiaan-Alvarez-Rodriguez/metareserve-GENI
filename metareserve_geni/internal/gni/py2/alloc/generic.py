@@ -65,7 +65,7 @@ def slice_renew(ctx, slicename, expiration=60*24*7, retries=5, retries_sleep=5):
         retries_sleep: Number of seconds to sleep for each retry.
 
     Returns:
-        (`CreationState`, `datetime`): Arg 1 indicates what happened in this function. Arg 2 is a datetime if arg 1 == RENEWED
+        (`CreationState`, `datetime`): Arg 1 indicates what happened in this function. Arg 2 is a datetime if arg 1 == RENEWED. Otherwise, it returns the human-understandable error cause.
     '''
     if not sharedutil.lowercase_alpha(slicename):
         print('Slicename must be all lowercase alphabetic characters, found: {}'.format(slicename))
@@ -80,7 +80,11 @@ def slice_renew(ctx, slicename, expiration=60*24*7, retries=5, retries_sleep=5):
         except Fault as e:
             if x != retries-1:
                 time.sleep(retries_sleep)
-    return (CreationState.FAILED, None)
+        except geni.aggregate.context.SliceCredInfo.CredentialExpiredError as e:
+            e_msg = str(e).strip().replace('\n', ' ')
+            if 'expired on' in e_msg:
+                return (CreationState.FAILED, 'Remote still has an expired slicename with the same name ("{}"") in memory. (Determined from error msg: {}). Please pick another slicename.'.format(slicename, e))
+    return (CreationState.FAILED, 'Experienced error: 503: Server temporarily offline')
 
 
 def slice_create(ctx, slicename, expiration=60*24*7, renew_exist=True, retries=5, retries_sleep=5):
@@ -101,8 +105,7 @@ def slice_create(ctx, slicename, expiration=60*24*7, renew_exist=True, retries=5
         (`CreationState`, `datetime`): Arg 1 indicates what happened in this function. Arg 2 is a datetime if arg 1 == CREATED | EXISTS | RENEWED
     '''
     if not sharedutil.lowercase_alpha(slicename):
-        print('Slicename must be all lowercase alphabetic characters, found: {}'.format(slicename))
-        return (CreationState.FAILED, None)
+        return (CreationState.FAILED, 'Slicename must be all lowercase alphabetic characters, found: {}'.format(slicename))
 
     for x in range(retries): 
         try:
@@ -126,7 +129,7 @@ def slice_create(ctx, slicename, expiration=60*24*7, renew_exist=True, retries=5
                     return (CreationState.EXISTS, date) 
             if x != retries-1:
                 time.sleep(retries_sleep)
-    return (CreationState.FAILED, None)
+    return (CreationState.FAILED, 'Experienced error: 503: Server temporarily offline')
 
 
 

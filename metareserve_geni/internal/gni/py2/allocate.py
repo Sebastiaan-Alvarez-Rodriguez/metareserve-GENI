@@ -70,7 +70,7 @@ def _allocate_slice(ctx, slicename, expiration):
         end date for reservation.'''
     state, date = generic.slice_create(ctx, slicename, expiration=expiration)
     if state == generic.CreationState.FAILED:
-        print('Could not create (or renew) slice!')
+        print('Could not create (or renew) slice: {}'.format(date)) # Because we had a failure, the second arg is the error message
         return None
     print('Slice created/renewed until date: {}.'.format(date))
     return date
