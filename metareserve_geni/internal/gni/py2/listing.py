@@ -19,6 +19,8 @@ def list_slices(slicename=None, location=None, corrected=True):
     ctx = get_context()
     generic.print_slicelist(ctx, slicename=slicename, corrected=corrected)
     if slicename != None:
+        print('')
+        print('Fetching specific info for slice "{}"...'.format(slicename))
         info = ctx.getSliceInfo(slicename)
         print('path: {}'.format(info._path))
         print('expiration: {}'.format(info.expires))
@@ -32,6 +34,7 @@ def list_slices(slicename=None, location=None, corrected=True):
         if not did_expire:
             manifest = generic.sliver_res(ctx, slicename, location=locutil.location_get(location))
             if not manifest:
+                print('Has this slice recently been deleted?')
                 print('Could not display slice info.')
                 return False
             print('number of nodes: {}'.format(manifest.num_nodes))

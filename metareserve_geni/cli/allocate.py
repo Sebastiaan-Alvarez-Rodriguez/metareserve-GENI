@@ -99,7 +99,6 @@ Set allocation time to 7199'''.format(time_alloc))
     for x in nodes:
         print(str(x))
     prints('Reservation success')
-
     return True
 
 

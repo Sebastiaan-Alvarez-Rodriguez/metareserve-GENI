@@ -83,7 +83,7 @@ def slice_renew(ctx, slicename, expiration=60*24*7, retries=5, retries_sleep=5):
         except geni.aggregate.context.SliceCredInfo.CredentialExpiredError as e:
             e_msg = str(e).strip().replace('\n', ' ')
             if 'expired on' in e_msg:
-                return (CreationState.FAILED, 'Remote still has an expired slicename with the same name ("{}"") in memory. (Determined from error msg: {}). Please pick another slicename.'.format(slicename, e))
+                return (CreationState.FAILED, 'Remote still has an expired slicename with the same name ("{}") in memory. (Determined from error msg: {}). Please pick another slicename.'.format(slicename, e))
     return (CreationState.FAILED, 'Experienced error: 503: Server temporarily offline')
 
 

@@ -24,4 +24,7 @@ def deploy_args_set(args):
 
 
 def deploy(parsers, args):
-    return py2bridge.sliver_deallocate(args.name, args.location)
+    if py2bridge.deallocate(args.name, args.location):
+        prints('Resource deallocation success')
+        return True
+    return False
