@@ -24,7 +24,7 @@ class GENINode(object):
         return self._image
 
     @staticmethod
-    def from_string(self, string):
+    def from_string(string):
         '''Constructs a `GENINode` from a string.'''
         return GENINode(*string.split('|'))
 
@@ -45,15 +45,6 @@ class GENIReservationProfile(object):
     def add(self, node):
         '''Add a `GENINodeProfile` to the reservation profile.'''
         self.nodeprofiles[node.name] = node
-    
-    @staticmethod
-    def from_string(self, string):
-        '''Constructs a `GENIReservationProfile` from a string.'''
-        val = GENIReservationProfile()
-        for line in string.strip().split('\n'):
-            val.add(GENINode.from_string(line))
-        return val
-
 
     @staticmethod
     def make(num_nodes, hw_type, image):
@@ -62,6 +53,7 @@ class GENIReservationProfile(object):
             num_nodes (int): Number of nodes in profile.
             hw_type (str): Hardware specification to use.
             image (str, optional): Image to boot on each node.
+
         Returns:
             Constructed `GENIReservationProfile`.'''
         profile = GENIReservationProfile()
@@ -69,8 +61,16 @@ class GENIReservationProfile(object):
             profile.add(GENINode('node{}'.format(idx), hw_type, image))
         return profile
 
+    @staticmethod
+    def from_string(string):
+        '''Constructs a `GENIReservationProfile` from a string.'''
+        val = GENIReservationProfile()
+        for line in string.split('\n'):
+            val.add(GENINode.from_string(line))
+        return val
+
     def __str__(self):
-        return '\n'.join(str(x) for x in nodes)
+        return '\n'.join(str(x) for x in self.nodes)
 
     def __len__(self):
         return len(self.nodeprofiles)
@@ -85,12 +85,16 @@ class GENIReservationRequest(_ReservationRequest):
             location (str): Location for reserved nodes.
             slicename (str): Slicename to use for allocation.
             reservation_profile (GENIReservationProfile): ReservationProfile to use for allocation.'''
-        super.__init__(len(reservation_profile), duration_minutes, location=location)
+        super().__init__(len(reservation_profile), duration_minutes, location=location)
         if duration_minutes >= 7200:
             raise ValueError('GENI only allows to allocate for 7199 minutes or less.')
-        self.nodes = None
+        self._profile = reservation_profile
         self.slicename = slicename
 
+    @property
+    def nodes(self):
+        return [x for x in self._profile.nodes]
+    
 
     @staticmethod
     def make(num_nodes, duration_minutes, location, hw_type, image='urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD', slicename='metareserve'):
@@ -106,20 +110,3 @@ class GENIReservationRequest(_ReservationRequest):
             Constructed `GENIReservationRequest`.'''
         profile = GENIReservationProfile.make(num_nodes, hw_type, image)
         return GENIReservationRequest(duration_minutes, location, slicename, profile)
-
-
-
-# class GENITimeSlotReservationRequest(TimeSlotReservationRequest):
-#     '''Object representing a timeslot reservation request (request nodes from datetime X, ending at datetime Y).
-#     Args:
-#         num_nodes (int): Number of nodes in reservation.
-#         duration_start (datetime): Start time for reserved nodes.
-#         duration_end (datetime): End time for reserved nodes.
-#         location (str, optional): Location for reserved nodes.'''
-#     def __init__(self, num_nodes, duration_start, duration_end, location=''):
-#         super.__init__(num_nodes, _duration_start, _duration_end, location=location)
-#         self.nodes = dict()
-
-
-#     def add(self, node=None):
-#         self.nodes[node.name] = node

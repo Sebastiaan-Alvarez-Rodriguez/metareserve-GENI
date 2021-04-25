@@ -31,13 +31,13 @@ def slice_list(ctx, corrected=True):
     '''List available slices for this project. Also tries to fix inherently broken GENI by filtering wrong entries.'''
     now = datetime.datetime.now()
     for x in ctx.cf.listSlices(ctx).keys():
-        if (not corrected) or (not 'mspark' in x) or ctx.getSliceInfo(x.split('+')[-1]).expires > now:
+        if (not corrected) or (not 'metareserve' in x) or ctx.getSliceInfo(x.split('+')[-1]).expires > now:
             yield x
 
 def print_slicelist(ctx, slicename=None, corrected=True):
     '''Prints the list of currently available slices. Uses colors for visual grepping. 
-    Cyan entries are created by MetaSpark. Purple entries are the ones we are looking for.
-    Sorts our slicenames (the ones with "mspark" in them) to the front.
+    Cyan entries are reservations created by this tool. Purple entries are the ones we are looking for at the moment.
+    Sorts our slicenames (the ones with "metareserve" in them) to the front.
 
     Args:
         ctx: geni-lib context.
@@ -47,10 +47,10 @@ def print_slicelist(ctx, slicename=None, corrected=True):
     CLR = '\033[0m'
     print('Available slices{}:'.format(' (corrected)' if corrected else ''))
     names = list(slice_list(ctx, corrected=corrected))
-    for x in (y for y in names if 'mspark' in y):
+    for x in (y for y in names if 'metareserve' in y):
         startcolor = PRP if slicename != None and slicename == x.split('+')[-1] else CAN 
         print('\t{}{}{}'.format(startcolor, x, CLR))
-    for x in (y for y in names if not 'mspark' in y):
+    for x in (y for y in names if not 'metareserve' in y):
         print('\t{}'.format(x))
 
 

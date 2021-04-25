@@ -2,7 +2,7 @@ from enum import Enum
 import itertools
 
 class AllocRequest(object):
-    '''Object to contain Ceph reservation requests.'''
+    '''Object to contain GENI python2 reservation requests.'''
     def __init__(self):
         self.nodes = []
 

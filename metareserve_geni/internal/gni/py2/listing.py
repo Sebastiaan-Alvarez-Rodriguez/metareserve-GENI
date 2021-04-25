@@ -1,3 +1,5 @@
+import datetime
+
 import geni.util
 
 import alloc.generic as generic
@@ -33,16 +35,17 @@ def list_slices(slicename=None, location=None, corrected=True):
                 print('Could not display slice info.')
                 return False
             print('number of nodes: {}'.format(manifest.num_nodes))
-            print('Connection infos:')
-            for x in sorted(manifest.get_connect_info(), key=lambda x: x.name):
-                print('\t{}'.format(x))
+            print('Connection info:')
+            print('\thostname|username|ip_local|ip_public|port')
+            for info in sorted(manifest.get_connect_info(), key=lambda x: x.name):
+                print('\t{}'.format(info))
     return True
 
 
 def subparser(subparsers):
     '''Register subparser modules'''
     listsliceparser = subparsers.add_parser('list', help='List cluster info for U.S. federal government clusters.')
-    listsliceparser.add_argument('-n', '--name', metavar='name', nargs='?', default=None, const='msparkceph', help='Name of slice on US resource (if no arg, default="msparkceph")')
+    listsliceparser.add_argument('-n', '--name', metavar='name', nargs='?', default=None, const='metareserve', help='Name of slice on US resource (if no arg, default="metareserve")')
     listsliceparser.add_argument('-l', '--location', metavar='location', nargs='?', default=None, const='cl-utah', help='Name of slice on US resource (if no arg, default="cl-utah", which is CloudLab, Utah site)')
     listsliceparser.add_argument('-a', '--all', help='Print all slice given by GENI, even wrong entries (we filter away known expired entries by default).', action='store_true')
 
