@@ -13,3 +13,12 @@ Additionally, for python2.7, the following packages are needed:
 
 ## Installing
 Simply run `pip3 install metareserve-GENI --user`.
+
+
+## Usage
+With this package, a new command `geni-reserve` will be available.
+It can doe 3 things:
+ - `list` slices & allocated resources for a given slice.
+ - `allocate` resources on a cluster site. Users can specify the hostname, hardware type and image to boot per node. Configurations can be saved an reused.
+ - `deallocate` resources.
+Use `geni-reserve -h` for more information.
