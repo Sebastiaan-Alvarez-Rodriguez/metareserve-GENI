@@ -1,5 +1,3 @@
-import concurrent.futures
-
 from metareserve.reservation import ReservationRequest as _ReservationRequest
 
 class GENINode(object):

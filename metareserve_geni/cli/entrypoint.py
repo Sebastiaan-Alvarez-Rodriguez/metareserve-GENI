@@ -3,7 +3,7 @@ import argparse
 import os
 import sys
 
-'''Python CLI module to deploy geni.'''
+'''Python CLI module to make geni allocations.'''
 
 
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__)))) # Appends main project root as importpath.
@@ -23,11 +23,11 @@ def subparser(parser):
 
 
 # Processing of deploy commandline args occurs here
-def deploy(parsers, args):
+def deploy(mainparser, parsers, args):
     for parsers_for_module, module in zip(parsers, _get_modules()):
         if module.deploy_args_set(args):
             return module.deploy(parsers_for_module, args)
-    deployparser.print_help()
+    mainparser.print_help()
     return True
 
 
@@ -41,7 +41,7 @@ def main():
     geniparsers = subparser(parser)
 
     args = parser.parse_args()
-    retval = deploy(geniparsers, args)
+    retval = deploy(parser, geniparsers, args)
 
     if isinstance(retval, bool):
         exit(0 if retval else 1)
