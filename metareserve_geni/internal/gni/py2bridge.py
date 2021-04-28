@@ -118,10 +118,9 @@ def allocate(expiration, reservation_request):
     Returns:
         List of `metareserve.reservation.Node` on success, `None` otherwise.'''
     cmd ='{} {} allocate {}'.format(_get_py2_executable_name(), _get_py2_cli(), expiration)
-    if slicename != None:
-        cmd += ' --name {}'.format(reservation_request.slicename)
-    if location != None:
-        cmd += ' --location {}'.format(reservation_request.location)
+   
+    cmd += ' --name {}'.format(reservation_request.slicename)
+    cmd += ' --location {}'.format(reservation_request.location)
 
     allocrequest = _to_internal_request(reservation_request)
     _, nodes = _py2_exec_get_nodes(cmd, stdin=str(allocrequest))
