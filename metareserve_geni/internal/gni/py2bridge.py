@@ -61,7 +61,7 @@ def _py2_exec_get_nodes(cmd, stdin=None):
             return (False, None)
         with open(path, 'r') as f:
             try:
-                raw_infos = (_RawConnectInfo.from_string(line) for line in f.readlines())
+                raw_infos = [_RawConnectInfo.from_string(line.strip()) for line in f.readlines()]
             except Exception as e: # Could not read info, but we had a 0 exit status code. Probably, slice referenced has expired.
                 return (True, None)
     return (True, [metareserve.Node(idx, node_name=x.name, ip_local=x.ip_local, ip_public=x.ip_public, port=x.port, extra_info={'user': x.user}) for idx, x in enumerate(raw_infos)])
@@ -85,6 +85,7 @@ def list_slices(slicename=None, location=None, show_all=False):
         cmd += ' --all'
     if slicename and location:
         success, nodes = _py2_exec_get_nodes(cmd)
+        print('{}: {}'.format(success, ','.join(str(x) for x in nodes)))
         if not nodes:
             return success
         print('Reservation:')

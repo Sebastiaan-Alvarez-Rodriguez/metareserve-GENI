@@ -65,12 +65,12 @@ class Manifest(object):
     def get_connect_info(self):
         '''Returns iterable of `RawConnectInfo`:(name, user, ip_local, ip_public, port) for all found nodes'''
         if self.__type == ManifestType.CREATE_SLIVER:
-            return (RawConnectInfo(
+            return [RawConnectInfo(
                 str(self.data['rspec']['node'][idx]['@client_id']),
                 str(self.data['rspec']['node'][idx]['services']['login']['@username']),
                 str(self.data['rspec']['node'][idx]['interface']['ip']['@address']),
                 str(self.data['rspec']['node'][idx]['host']['@ipv4']),
-                str(self.data['rspec']['node'][idx]['services']['login']['@port'])) for idx in range(self.__num_nodes))
+                str(self.data['rspec']['node'][idx]['services']['login']['@port'])) for idx in range(self.__num_nodes)]
         else:
             name = str(self.data['rspec']['node']['@client_id'])
             user = str(self.data['rspec']['node']['services']['login']['@username'])

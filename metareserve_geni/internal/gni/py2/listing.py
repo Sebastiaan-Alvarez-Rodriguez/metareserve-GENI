@@ -15,7 +15,10 @@ def list_slices(slicename=None, location=None, corrected=True, tmpoutloc=None):
         slicename (optional str): If set, we print specific info for that slice. Requires `location` to be set`.
         location (optional str): Location of given `slicename`. Must be set alonside `slicename` argument.
         corrected (optional bool): If set, corrects list of displayed slices by removing expired entries. Leaves as-is otherwise.
-        tmpoutloc (optional str): If set, writes `RawConnectInfo` in given loc.'''
+        tmpoutloc (optional str): If set, writes `RawConnectInfo` in given loc.
+
+    Returns:
+        `True` on success, `False` otherwise.'''
     if (slicename and not location) or location and not slicename:
         print('[ERROR] When specifying slicename, must specify location and viceversa.')
         return False
