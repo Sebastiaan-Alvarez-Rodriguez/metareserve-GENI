@@ -1,7 +1,7 @@
 import util as gutil
 
 
-def geni_lib_check():
+def geni_lib_check(silent):
     try:
         import geni
         return True
@@ -12,7 +12,7 @@ def geni_lib_check():
 
 # GENI needs the `six` package installed, but does not specify this in manifest. Therefore, We check it ourselves.
 # Returns `True` if `six` installed, `False` otherwise.
-def geni_six_check():
+def geni_six_check(silent):
     try:
         import six
         return True
@@ -32,11 +32,19 @@ def geni_lxml_check(silent):
             print('dependency not met: lxml')
         return False
 
+def geni_xmltodict_check(silent):
+    try:
+        import xmltodict
+        return True
+    except Exception as e:
+        if not silent:
+            print('dependency not met: xmltodict')
+        return False
 
 # Checks all dependencies at once. Returns `True` when all dependencies are satisfied.
 def geni_dependency_checks(silent=False):
     status = True
-    for x in (geni_lib_check, geni_six_check, geni_lxml_check):
+    for x in (geni_lib_check, geni_six_check, geni_lxml_check, geni_xmltodict_check):
         if not x(silent):
             status = False
     return status

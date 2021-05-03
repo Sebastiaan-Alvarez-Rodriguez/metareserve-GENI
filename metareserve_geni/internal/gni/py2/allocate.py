@@ -4,20 +4,17 @@ import socket
 import sys
 
 from geni.rspec import pg
-import geni.util
 import geni.aggregate.cloudlab
 
 import alloc.generic as generic
 from allocrequest import AllocRequest
 import location.location as locutil
 
+import util.geni_util as geni_util
 import sharedutil
 from connectinfo import RawConnectInfo
 
 '''CLI module to start a cluster.'''
-
-def get_context():
-    return geni.util.loadContext()
 
 
 def create_baremetal_node(name, img, hardware_type):
@@ -113,7 +110,9 @@ def allocate(slicename, expiration, location, tmpoutloc=None):
 
     Returns:
         `True` on success, `False` otherwise. On success, also prints relevant connection info for the cluster.'''
-    ctx = get_context()
+    ctx = geni_util.get_context()
+    if not ctx:
+        return False
     ar = AllocRequest.from_string(''.join(sys.stdin.readlines()))
     loc = locutil.location_get(location)
 

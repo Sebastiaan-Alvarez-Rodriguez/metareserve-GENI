@@ -1,16 +1,12 @@
 import argparse
 import datetime
 
-import geni.util
-
 import alloc.generic as generic
 import location.location as locutil
+import util.geni_util as geni_util
 
 
 '''CLI module to list GENI reources.'''
-
-def get_context():
-    return geni.util.loadContext()
 
 
 def list_slices(slicename=None, location=None, corrected=True, tmpoutloc=None):
@@ -23,7 +19,9 @@ def list_slices(slicename=None, location=None, corrected=True, tmpoutloc=None):
     if (slicename and not location) or location and not slicename:
         print('[ERROR] When specifying slicename, must specify location and viceversa.')
         return False
-    ctx = get_context()
+    ctx = geni_util.get_context()
+    if not ctx:
+        return False
     generic.print_slicelist(ctx, slicename=slicename, corrected=corrected)
     if slicename:
         print('')

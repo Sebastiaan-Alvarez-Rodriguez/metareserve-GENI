@@ -1,16 +1,16 @@
-import geni.util
-
 import alloc.generic as generic
 import location.location as locutil
+import util.geni_util as geni_util
+
 
 '''CLI module to deallocate a cluster.'''
 
-def get_context():
-    return geni.util.loadContext()
-
 
 def deallocate(slicename, location):
-    return generic.sliver_deallocate(get_context(), slicename, location=locutil.location_get(location))
+    ctx = geni_util.get_context()
+    if not ctx:
+        return False
+    return generic.sliver_deallocate(ctx, slicename, location=locutil.location_get(location))
 
 
 def subparser(subparsers):
