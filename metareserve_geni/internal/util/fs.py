@@ -130,11 +130,13 @@ def touch(path, *args):
 def unpack(filename, extract_dir):
     if not filename.endswith('.zip'):
         shutil.unpack_archive(filename, extract_dir)
+        return
+
     # Below code is taken from the shutil implementation: https://github.com/python/cpython/blob/78b2abca8e96b43f56ab1b9ad673aaa6bbe7e790/Lib/shutil.py#L1152-L1181
     # All credits for this code to them. We changed it to work with our zipfile object, which maintains file permissions. Also, we substituted a function to make directories with our own.
     import zipfile  # late import for breaking circular dependency
     if not zipfile.is_zipfile(filename):
-        raise ReadError("%s is not a zip file" % filename)
+        raise shutil.ReadError("%s is not a zip file" % filename)
     zip = _ZipFileWithpermissions(filename)
     try:
         for info in zip.infolist():
