@@ -2,8 +2,8 @@ import datetime
 import re
 
 def lowercase_alpha(string):
-    '''Returns `True` iff `string` only contains lowercase letters, `False` otherwise. Any other characters, e.g. `_` and `9` will not match.'''
-    return re.match('^[a-z]+$', string) != None
+    '''Returns `True` iff `string` only contains lowercase letters, numbers, and '-'. Returns `False` otherwise.'''
+    return re.match('^[a-z0-9\-]+$', string) != None
 
 
 def datetime_get(obj):
