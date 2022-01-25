@@ -45,14 +45,15 @@ class AllocRequest(object):
 
 class Node(object):
     '''Object to store individual node requests.'''
-    def __init__(self, name, hw_type='c6525-25g', img='urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD'):
+    def __init__(self, name, hw_type='c6525-25g', img='urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD', block_store_size='0'):
         self.name = name
         self.hw_type = hw_type
         self.img = img
+        self.block_store_size = block_store_size
 
 
     def __str__(self):
-        return '|'.join(str(x) for x in (self.name, self.hw_type, self.img))
+        return '|'.join(str(x) for x in (self.name, self.hw_type, self.img, self.block_store_size))
 
 
     @staticmethod

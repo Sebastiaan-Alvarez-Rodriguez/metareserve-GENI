@@ -73,7 +73,7 @@ def build_profile_interactive(node_amount):
                 f.write(str(profile))
             print('Wrote config at location: {}'.format(fs.join(loc.profiledir(), cached_profilename)))
             break
-    prints('Resrvation profile creation success.')
+    prints('Reservation profile creation success.')
     return profile
 
 
