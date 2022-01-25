@@ -36,6 +36,7 @@ def build_profile_interactive(node_amount):
     cached_hwtype = None
     cached_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD'
     picked_names = []
+    cached_block_store_size = 0
     for idx in range(node_amount):
         print('Processing node {}/{}'.format(idx+1, node_amount))
         
@@ -51,8 +52,11 @@ def build_profile_interactive(node_amount):
         
         img_question = '\timage [{}]:'.format(cached_image)
         cached_image = _cached(ui.ask_string(img_question, empty_ok=True), cached_image)
+
+        block_store_size_question = '\tblockstore size (\'0\' for no extra storage) [{}]'.format(cached_block_store_size)
+        cached_block_store_size = _cached(ui.ask_string(block_store_size_question, empty_ok=True), cached_block_store_size)
         
-        profile.add(GENINode(reply_name, cached_hwtype, cached_image))
+        profile.add(GENINode(reply_name, cached_hwtype, cached_image, block_store_size=cached_block_store_size))
 
     print('Reservation profile complete.')
     if ui.ask_bool('Save profile? [N]:', empty_ok=True):
