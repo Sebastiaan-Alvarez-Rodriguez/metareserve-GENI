@@ -18,11 +18,11 @@ from connectinfo import RawConnectInfo
 '''CLI module to start a cluster.'''
 
 
-def create_baremetal_node(name, img, hardware_type, block_store_size=0):
+def create_baremetal_node(name, img, hardware_type, block_store_size='0'):
     node = pg.RawPC(name)
     node.disk_image = img
     node.hardware_type = hardware_type
-    if block_store_size != 0:
+    if block_store_size != '0' and block_store_size != 0:
         bs = node.Blockstore('bs', '/localblob')
         bs.size = '{}GB'.format(block_store_size)
     return node

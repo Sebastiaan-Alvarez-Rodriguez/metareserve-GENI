@@ -7,7 +7,7 @@ class AllocRequest(object):
         self.nodes = []
 
 
-    def add(self, name, hw_type='c6525-25g', img='urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD'):
+    def add(self, name, hw_type='c6525-25g', img='urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD', block_store_size='0'):
         '''Adds node to request. Note: The `name` of the node must be unique. Note: `name` may not contain '|'.
         Args:
             name: Used as node name. GENI will use this name as hostname for the spawned node.
@@ -18,7 +18,7 @@ class AllocRequest(object):
             raise ValueError('Node name "{}" includes illegal character "|"!'.format(name))
         if any(x.isupper() for x in name):
             print('[WARNING] Node name "{}" contains uppercase letters. Transformed to lowercase, because GENI does not understand stuff otherwise.'.format(name))
-        self.nodes.append(Node(name.lower(), hw_type, img))
+        self.nodes.append(Node(name.lower(), hw_type, img, block_store_size=block_store_size))
 
 
     def list(self):
@@ -53,9 +53,9 @@ class Node(object):
 
 
     def __str__(self):
-        return '|'.join(str(x) for x in (self.name, self.hw_type, self.img, self.block_store_size))
+        return '|'.join(str(x) for x in (self.name, self.hw_type, self.img))
 
 
     @staticmethod
     def from_string(string):
-        return Node(*string.split('|', 2))
+        return Node(*string.split('|', 3))

@@ -35,7 +35,7 @@ class GENINode(object):
         return GENINode(*string.split('|'))
 
     def __str__(self):
-        return '|'.join([self._name, self._hw_type, self._image, self._block_store_size])
+        return '|'.join([self._name, self._hw_type, self._image])
 
 
 
