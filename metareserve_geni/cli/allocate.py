@@ -55,7 +55,7 @@ def build_profile_interactive(node_amount):
 
         block_store_size_question = '\tblockstore size (\'0\' for no extra storage) [{}]'.format(cached_block_store_size)
         cached_block_store_size = _cached(ui.ask_string(block_store_size_question, empty_ok=True), cached_block_store_size)
-        
+
         profile.add(GENINode(reply_name, cached_hwtype, cached_image, block_store_size=cached_block_store_size))
 
     print('Reservation profile complete.')

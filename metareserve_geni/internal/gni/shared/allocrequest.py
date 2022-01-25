@@ -53,7 +53,7 @@ class Node(object):
 
 
     def __str__(self):
-        return '|'.join(str(x) for x in (self.name, self.hw_type, self.img))
+        return '|'.join(str(x) for x in (self.name, self.hw_type, self.img, self.block_store_size))
 
 
     @staticmethod
