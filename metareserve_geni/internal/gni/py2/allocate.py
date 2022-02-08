@@ -23,7 +23,7 @@ def create_baremetal_node(name, img, hardware_type, block_store_size='0'):
     node.disk_image = img
     node.hardware_type = hardware_type
     if block_store_size != '0' and block_store_size != 0:
-        bs = node.Blockstore('bs', '/localblob')
+        bs = node.Blockstore('bs_{}'.format(name), '/localblob')
         bs.size = '{}GB'.format(block_store_size)
     return node
 
