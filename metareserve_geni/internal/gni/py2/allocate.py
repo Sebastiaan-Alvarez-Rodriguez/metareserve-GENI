@@ -4,6 +4,7 @@ import socket
 import sys
 
 from geni.rspec import pg
+from geni.rspec.igext import Blockstore
 import geni.aggregate.cloudlab
 
 import alloc.generic as generic
@@ -17,10 +18,13 @@ from connectinfo import RawConnectInfo
 '''CLI module to start a cluster.'''
 
 
-def create_baremetal_node(name, img, hardware_type):
+def create_baremetal_node(name, img, hardware_type, block_store_size='0'):
     node = pg.RawPC(name)
     node.disk_image = img
     node.hardware_type = hardware_type
+    if block_store_size != '0' and block_store_size != 0:
+        bs = node.Blockstore('bs_{}'.format(name), '/localblob')
+        bs.size = '{}GB'.format(block_store_size)
     return node
 
 
@@ -46,7 +50,7 @@ def create_request(allocrequest):
     geni_nodes = []
 
     for node in allocrequest.list():
-        geni_node = create_baremetal_node(node.name, node.img, node.hw_type)
+        geni_node = create_baremetal_node(node.name, node.img, node.hw_type, block_store_size=node.block_store_size)
         geni_nodes.append(geni_node)
         request.addResource(geni_node)
 

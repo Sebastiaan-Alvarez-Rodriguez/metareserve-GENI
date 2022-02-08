@@ -15,7 +15,7 @@ from internal.util.printer import *
 def _to_internal_request(reservation_request):
     allocrequest = _AllocRequest()
     for x in reservation_request.nodes:
-        allocrequest.add(x.name, x.hw_type, x.image)
+        allocrequest.add(x.name, x.hw_type, x.image, x.block_store_size)
     return allocrequest
 
 

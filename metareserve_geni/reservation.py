@@ -5,11 +5,13 @@ class GENINode(object):
     Args:
         name (str): Hostname for this node.
         hw_type (str): Hardware type. Check the available hardware types and their specifications at (e.g.) https://www.cloudlab.us/resinfo.php.
-        image (str): OS image to boot on node.'''
-    def __init__(self, name, hw_type, image):
+        image (str): OS image to boot on node. 
+        block_store_size (str) (optional): size in GB of extended storage'''
+    def __init__(self, name, hw_type, image, block_store_size='0'):
         self._name = name
         self._hw_type = hw_type
         self._image = image
+        self._block_store_size = block_store_size
 
     @property
     def name(self):
@@ -23,13 +25,17 @@ class GENINode(object):
     def image(self):
         return self._image
 
+    @property
+    def block_store_size(self):
+        return self._block_store_size
+
     @staticmethod
     def from_string(string):
         '''Constructs a `GENINode` from a string.'''
         return GENINode(*string.split('|'))
 
     def __str__(self):
-        return '|'.join([self._name, self._hw_type, self._image])
+        return '|'.join([self._name, self._hw_type, self._image, self._block_store_size])
 
 
 
